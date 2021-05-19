@@ -17,4 +17,14 @@ public function index(): Response
        'website' => 'Wild Séries',
     ]);
 }
+
+ /**
+  * @Route("/programs/4", requirements={"page"="\d+"}, name="program_show")
+  */
+public function show(int $page = 4): Response
+{
+    return $this->render('program/show.html.twig', ['page' => $page]);
+}
+
+
 }
