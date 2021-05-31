@@ -14,13 +14,18 @@ class ProgramController extends AbstractController
 {
 
 
+
+
+ 
 /**
  * Getting a program by id
  *
  * @Route("program/show/{id<^[0-9]+$>}", name="program_show")
  * @return Response
  */
-public function show(int $id):Response
+
+
+public function show(Program $id):Response
 {
     $program = $this->getDoctrine()
         ->getRepository(Program::class)
@@ -39,13 +44,16 @@ public function show(int $id):Response
     ]);
     
 }
+
+
+
 /**
  * Getting a episode by season and program
  *
  * @Route(" /program/show/{programId}/seasons/{seasonId}", name="season_show")
  * @return Response
  */
-public function showSeason(int $programId, int $seasonId)
+public function showSeason(Program $programId, Season $seasonId)
 {
     $program = $this->getDoctrine()
          ->getRepository(Program::class)
@@ -82,4 +90,7 @@ public function index(): Response
              ['programs' => $programs]
          );
     }
+
+    
 }
+
