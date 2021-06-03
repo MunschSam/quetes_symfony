@@ -16,13 +16,23 @@
 
   <h5 class="card-title">saison numéro {{ season.number }} de l'année {{ season.year }}</h5>
         
-  <a href="{{ path("season_show", { programId: program.id, seasonId: season.id }) }}" >Voir les détails</a>
+  <a href="{{ path("season_show", { id: program.id, id: season.id }) }}" >Voir les détails</a>
   <br>
 
   {% else %}
 
   Il n'y a pas de season
 {% endfor %}
+
+<strong>Acteurs :</strong>
+
+<ul>
+    {% for actor in program.actors %}
+        <li><a href="{{path("actor_show", {id :actor.id }) }}">{{ actor.name }} </a></li>
+    {% else %}
+        <li>Aucun acteur pour cette série</li>
+    {% endfor %}
+</ul>
 
 <a href="{{ path('program_index') }}">
     Retour à la liste des programmes

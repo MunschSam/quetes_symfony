@@ -11,6 +11,7 @@ use App\Entity\Category;
 use App\Entity\Episode;
 use App\Form\ProgramType;
 use Symfony\Component\HttpFoundation\Request;
+use App\Entity\Actor;
 
 class ProgramController extends AbstractController
 {
@@ -57,7 +58,7 @@ class ProgramController extends AbstractController
  * @Route("program/show/{id<^[0-9]+$>}", name="program_show")
  * @return Response
  */
-public function show(Program $id):Response
+public function show(int $id):Response
 {
     $program = $this->getDoctrine()
         ->getRepository(Program::class)
@@ -85,7 +86,7 @@ public function show(Program $id):Response
  * @Route(" /program/show/{programId}/seasons/{seasonId}", name="season_show")
  * @return Response
  */
-public function showSeason(Program $programId, Season $seasonId)
+public function showSeason(int $programId, int $seasonId)
 {
     $program = $this->getDoctrine()
          ->getRepository(Program::class)
