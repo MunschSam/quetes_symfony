@@ -12,6 +12,9 @@ use App\Entity\Episode;
 use App\Form\ProgramType;
 use Symfony\Component\HttpFoundation\Request;
 use App\Entity\Actor;
+use App\Services\Slugify;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 
 class ProgramController extends AbstractController
 {
@@ -22,8 +25,9 @@ class ProgramController extends AbstractController
      *
      * @Route("/programs/new", name="program_new")
      */
-    public function new(Request $request) : Response
+    public function new(Request $request, Slugify $slugify, MailerInterface $mailer) : Response
     {
+        
         // Create a new Program Object
         $program = new Program();
         // Create the associated Form
@@ -40,10 +44,26 @@ class ProgramController extends AbstractController
             // Deal with the submitted data
             // Get the Entity Manager
             $entityManager = $this->getDoctrine()->getManager();
+
+            $slug = $slugify->generate($program->getTitle());
+            $program->setSlug($slug);
+
             // Persist Category Object
             $entityManager->persist($program);
             // Flush the persisted object
             $entityManager->flush();
+
+
+            
+
+        $email = (new Email())
+                ->from('c5e5de148a-b1856b@inbox.mailtrap.io')
+                ->to('c5e5de148a-b1856b@inbox.mailtrap.io')
+                ->subject('Une nouvelle série vient d\'être publiée !')
+                ->html($this->renderView('Program/newProgramEmail.html.twig', ['program' => $program]));
+
+        $mailer->send($email);
+
             // Finally redirect to categories list
             return $this->redirectToRoute('program_index');
         }
@@ -58,11 +78,11 @@ class ProgramController extends AbstractController
  * @Route("program/show/{id<^[0-9]+$>}", name="program_show")
  * @return Response
  */
-public function show(int $id):Response
+public function show(Program $program):Response
 {
     $program = $this->getDoctrine()
         ->getRepository(Program::class)
-        ->findOneBy(['id' => $id]);
+        ->findOneBy(['id' => $program]);
 
         $seasons = $program->getSeasons();
 
@@ -124,5 +144,8 @@ public function index(): Response
          );
     }
   
+    
+        
+    
 }
 

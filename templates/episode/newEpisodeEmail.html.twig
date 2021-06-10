@@ -1,0 +1,7 @@
+{% extends 'baseMail.html.twig' %}
+
+{% block body %}
+    <h1>New episode {{ episode.title }} created</h1>
+    <p>Hello, the new program {{ episode.title }} has been created on season {{episode.number}}</p>
+    <p>Synopsis : {{episode.synopsis }}
+{% endblock %}
