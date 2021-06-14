@@ -45,8 +45,8 @@ class ProgramController extends AbstractController
             // Get the Entity Manager
             $entityManager = $this->getDoctrine()->getManager();
 
-            $slug = $slugify->generate($program->getTitle());
-            $program->setSlug($slug);
+            $slug = $slugify->generate($episode->getNumber());
+            $episode->setSlug($slug);
 
             // Persist Category Object
             $entityManager->persist($program);
@@ -75,7 +75,7 @@ class ProgramController extends AbstractController
 /**
  * Getting a program by id
  *
- * @Route("program/show/{id<^[0-9]+$>}", name="program_show")
+ * @Route("program/show/{slug}", name="program_show")
  * @return Response
  */
 public function show(Program $program):Response
@@ -103,7 +103,7 @@ public function show(Program $program):Response
 /**
  * Getting a episode by season and program
  *
- * @Route(" /program/show/{programId}/seasons/{seasonId}", name="season_show")
+ * @Route(" /program/show/{slug}/seasons/{seasonId}", name="season_show")
  * @return Response
  */
 public function showSeason(int $programId, int $seasonId)

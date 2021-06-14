@@ -7,6 +7,7 @@ use App\Entity\Season;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
+use App\Services\Slugify;
 
 class ProgramFixtures extends Fixture implements DependentFixtureInterface
 {
@@ -19,7 +20,12 @@ class ProgramFixtures extends Fixture implements DependentFixtureInterface
         'wild5',
     ];
 
-    
+    private $slugify;
+
+    public function __construct(Slugify $slugify)
+    {
+        $this->slugify = new $slugify;
+    }
     
     public function load(ObjectManager $manager)
     {
@@ -28,8 +34,10 @@ class ProgramFixtures extends Fixture implements DependentFixtureInterface
         foreach(self::PROGRAM as $key => $programName){
             $program = new Program();
             $program ->setTitle($programName);
+            $program ->setSummary("le summary");
             $program->setCategory($this->getReference('category_'.$key));
             $manager ->persist($program);
+            $program->setSlug($this->slugify->generate($programName));
             $this->addReference('program_' . $key, $program);
         }
         
